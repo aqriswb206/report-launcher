@@ -12,15 +12,20 @@
         return;
       }
 
-      // Trigger Zapier with GET request (no CORS issues)
+      // Send a GET request (CORS-safe) with query parameters
       const zapUrl = `https://hooks.zapier.com/hooks/catch/7475322/271lupp/?searchCode=${encodeURIComponent(searchCode)}&secret=secureKey123`;
 
       fetch(zapUrl)
-        .then(() => {
-          document.body.innerHTML = `
-            <h2>Report is being generated for Search Code: ${searchCode}</h2>
-            <p>You will receive an email shortly.</p>
-          `;
+        .then(response => {
+          if (response.ok) {
+            document.body.innerHTML = `
+              <h2>Report is being generated for Search Code: ${searchCode}</h2>
+              <p>You will receive an email shortly.</p>
+            `;
+          } else {
+            console.error("Non-200 response:", response.status);
+            document.body.innerHTML = "<h2>Failed to trigger report (Zapier returned an error).</h2>";
+          }
         })
         .catch(error => {
           console.error("Error triggering Zapier:", error);
