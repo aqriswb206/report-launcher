@@ -12,7 +12,7 @@
         return;
       }
 
-      // Send a GET request (CORS-safe) with query parameters
+      // Send a GET request with query params — no CORS issues
       const zapUrl = `https://hooks.zapier.com/hooks/catch/7475322/271lupp/?searchCode=${encodeURIComponent(searchCode)}&secret=secureKey123`;
 
       fetch(zapUrl)
