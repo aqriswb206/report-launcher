@@ -12,26 +12,20 @@
         return;
       }
 
-      fetch("https://hooks.zapier.com/hooks/catch/7475322/271lupp/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          searchCode: searchCode,
-          secret: "secureKey123"
+      // Trigger Zapier with GET request (no CORS issues)
+      const zapUrl = `https://hooks.zapier.com/hooks/catch/7475322/271lupp/?searchCode=${encodeURIComponent(searchCode)}&secret=secureKey123`;
+
+      fetch(zapUrl)
+        .then(() => {
+          document.body.innerHTML = `
+            <h2>Report is being generated for Search Code: ${searchCode}</h2>
+            <p>You will receive an email shortly.</p>
+          `;
         })
-      })
-      .then(() => {
-        document.body.innerHTML = `
-          <h2>Report is being generated for Search Code: ${searchCode}</h2>
-          <p>You will receive an email shortly.</p>
-        `;
-      })
-      .catch(error => {
-        console.error("Error triggering Zapier:", error);
-        document.body.innerHTML = "<h2>There was an error triggering the report generation.</h2>";
-      });
+        .catch(error => {
+          console.error("Error triggering Zapier:", error);
+          document.body.innerHTML = "<h2>There was an error triggering the report generation.</h2>";
+        });
     };
   </script>
 </head>
