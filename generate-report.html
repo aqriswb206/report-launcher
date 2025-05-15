@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generating Report...</title>
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const searchCode = params.get("searchCode");
+
+      if (!searchCode) {
+        document.body.innerHTML = "<h2>Error: Missing search code in the URL.</h2>";
+        return;
+      }
+
+      fetch("https://hooks.zapier.com/hooks/catch/7475322/271lupp/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          searchCode: searchCode,
+          secret: "secureKey123"
+        })
+      })
+      .then(() => {
+        document.body.innerHTML = `
+          <h2>Report is being generated for Search Code: ${searchCode}</h2>
+          <p>You will receive an email shortly.</p>
+        `;
+      })
+      .catch(error => {
+        console.error("Error triggering Zapier:", error);
+        document.body.innerHTML = "<h2>There was an error triggering the report generation.</h2>";
+      });
+    };
+  </script>
+</head>
+<body>
+  <h2>Launching report...</h2>
+</body>
+</html>
